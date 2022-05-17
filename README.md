@@ -8,7 +8,7 @@
 </repository>
 
 <dependency>
-    <groupId>com.github.Obliviated</groupId>
+    <groupId>com.github.minebreakcz</groupId>
     <artifactId>ObliviateInvs</artifactId>
     <version>3.2.0</version>
 </dependency>
