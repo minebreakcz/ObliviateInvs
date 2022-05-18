@@ -74,29 +74,21 @@ public class Icon {
 		return setLore(new ArrayList<>(Arrays.asList(lore)));
 	}
 
-	public Icon appendLore(final List<BaseComponent> strings) {
+	public Icon appendLore(final BaseComponent text) {
 		final ItemMeta meta = item.getItemMeta();
 		if (meta == null) return this;
 		List<String> lore = meta.getLore();
-		if (lore != null) lore.add(ComponentSerializer.toString(strings));
-		else lore = Collections.singletonList(ComponentSerializer.toString(strings));
+		if (lore != null) lore.add(ComponentSerializer.toString(text));
+		else return setLore(text);
 		return setLore((BaseComponent) lore);
 	}
 
-	public Icon appendLore(final BaseComponent... strings) {
-		return appendLore(new ArrayList<>(Arrays.asList(strings)));
-	}
-
-	public Icon insertLore(final int index, final BaseComponent... strings) {
-		return insertLore(index, new ArrayList<BaseComponent>(Arrays.asList(strings)));
-	}
-
-	public Icon insertLore(final int index, final List<BaseComponent> strings) {
+	public Icon insertLore(final int index, final BaseComponent text) {
 		final ItemMeta meta = item.getItemMeta();
 		if (meta == null) return this;
 		List<String> lore = meta.getLore();
-		if (lore != null) lore.addAll(index, Collections.singleton(ComponentSerializer.toString(strings)));
-		else lore = Collections.singletonList(ComponentSerializer.toString(strings));
+		if (lore != null) lore.add(index, ComponentSerializer.toString(text));
+		else setLore(text);
 		return setLore((BaseComponent) lore);
 	}
 
