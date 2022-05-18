@@ -1,5 +1,7 @@
 package mc.obliviate.inventory;
 
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -242,12 +244,33 @@ public abstract class Gui implements InventoryHolder {
 	}
 
 	/**
+	 * Sets title of GUI for GUIs that
+	 * will be open later.
+	 *
+	 * @param title
+	 */
+	public void setTitle(BaseComponent title) {
+		this.title = ComponentSerializer.toString(title);
+	}
+
+
+	/**
 	 * Automatically updates GUI title and reopens inventory
 	 *
 	 * @param titleUpdate
 	 */
 	public void sendTitleUpdate(String titleUpdate) {
 		this.title = titleUpdate;
+		open();
+	}
+
+	/**
+	 * Automatically updates GUI title and reopens inventory
+	 *
+	 * @param titleUpdate
+	 */
+	public void sendTitleUpdate(BaseComponent titleUpdate) {
+		this.title = ComponentSerializer.toString(titleUpdate);
 		open();
 	}
 

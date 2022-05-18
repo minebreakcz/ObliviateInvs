@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/Obliviated/ObliviateInvs.svg)](https://jitpack.io/#Obliviated/ObliviateInvs)
+[![](https://jitpack.io/v/minebreakcz/ObliviateInvs.svg)](https://jitpack.io/#minebreakcz/ObliviateInvs)
 
 # Maven
 ```

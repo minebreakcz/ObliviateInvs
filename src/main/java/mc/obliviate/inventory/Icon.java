@@ -1,6 +1,9 @@
 package mc.obliviate.inventory;
 
 import mc.obliviate.inventory.action.DragAction;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
@@ -9,10 +12,7 @@ import org.bukkit.inventory.meta.EnchantmentStorageMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import mc.obliviate.inventory.action.ClickAction;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Icon {
 
@@ -46,6 +46,13 @@ public class Icon {
 		return this;
 	}
 
+	public Icon setName(final BaseComponent name) {
+		final ItemMeta meta = item.getItemMeta();
+		if (meta == null) return this;
+		meta.setDisplayName(ComponentSerializer.toString(name));
+		item.setItemMeta(meta);
+		return this;
+	}
 
 	public Icon setName(final String name) {
 		final ItemMeta meta = item.getItemMeta();
@@ -55,42 +62,42 @@ public class Icon {
 		return this;
 	}
 
-	public Icon setLore(final List<String> lore) {
+	public Icon setLore(final List<BaseComponent> lore) {
 		final ItemMeta meta = item.getItemMeta();
 		if (meta == null) return this;
-		meta.setLore(lore);
+		meta.setLore(Collections.singletonList(ComponentSerializer.toString(lore)));
 		item.setItemMeta(meta);
 		return this;
 	}
 
-	public Icon setLore(final String... lore) {
+	public Icon setLore(final BaseComponent... lore) {
 		return setLore(new ArrayList<>(Arrays.asList(lore)));
 	}
 
-	public Icon appendLore(final List<String> strings) {
+	public Icon appendLore(final List<BaseComponent> strings) {
 		final ItemMeta meta = item.getItemMeta();
 		if (meta == null) return this;
 		List<String> lore = meta.getLore();
-		if (lore != null) lore.addAll(strings);
-		else lore = strings;
-		return setLore(lore);
+		if (lore != null) lore.add(ComponentSerializer.toString(strings));
+		else lore = Collections.singletonList(ComponentSerializer.toString(strings));
+		return setLore((BaseComponent) lore);
 	}
 
-	public Icon appendLore(final String... strings) {
+	public Icon appendLore(final BaseComponent... strings) {
 		return appendLore(new ArrayList<>(Arrays.asList(strings)));
 	}
 
-	public Icon insertLore(final int index, final String... strings) {
-		return insertLore(index, new ArrayList<>(Arrays.asList(strings)));
+	public Icon insertLore(final int index, final BaseComponent... strings) {
+		return insertLore(index, new ArrayList<BaseComponent>(Arrays.asList(strings)));
 	}
 
-	public Icon insertLore(final int index, final List<String> strings) {
+	public Icon insertLore(final int index, final List<BaseComponent> strings) {
 		final ItemMeta meta = item.getItemMeta();
 		if (meta == null) return this;
 		List<String> lore = meta.getLore();
-		if (lore != null) lore.addAll(index, strings);
-		else lore = strings;
-		return setLore(lore);
+		if (lore != null) lore.addAll(index, Collections.singleton(ComponentSerializer.toString(strings)));
+		else lore = Collections.singletonList(ComponentSerializer.toString(strings));
+		return setLore((BaseComponent) lore);
 	}
 
 	public Icon setAmount(final int amount) {
