@@ -1,6 +1,7 @@
 package mc.obliviate.inventory;
 
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.chat.ComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -28,11 +29,11 @@ public abstract class Gui implements InventoryHolder {
 	public Player player;
 	private Pagination paginationManager = null;
 	private Inventory inventory;
-	private String title;
+	private BaseComponent title;
 	private int size;
 	private boolean isClosed = false;
 
-	public Gui(Player player, String id, String title, int rows) {
+	public Gui(Player player, String id, BaseComponent title, int rows) {
 		this.player = player;
 		this.size = rows * 9;
 		this.title = title;
@@ -40,7 +41,7 @@ public abstract class Gui implements InventoryHolder {
 		this.inventoryType = InventoryType.CHEST;
 	}
 
-	public Gui(Player player, String id, String title, InventoryType inventoryType) {
+	public Gui(Player player, String id, BaseComponent title, InventoryType inventoryType) {
 		this.player = player;
 		this.size = Integer.MAX_VALUE;
 		this.title = title;
@@ -87,9 +88,9 @@ public abstract class Gui implements InventoryHolder {
 		InventoryAPI.getInstance().getPlayers().put(player.getUniqueId(), this);
 
 		if (inventoryType.equals(InventoryType.CHEST)) {
-			inventory = Bukkit.createInventory(null, size, title);
+			inventory = Bukkit.createInventory(null, size, title.toLegacyText());
 		} else {
-			inventory = Bukkit.createInventory(null, inventoryType, title);
+			inventory = Bukkit.createInventory(null, inventoryType, title.toLegacyText());
 		}
 
 		player.openInventory(inventory);
@@ -229,7 +230,7 @@ public abstract class Gui implements InventoryHolder {
 		return inventory;
 	}
 
-	public String getTitle() {
+	public BaseComponent getTitle() {
 		return title;
 	}
 
@@ -239,30 +240,10 @@ public abstract class Gui implements InventoryHolder {
 	 *
 	 * @param title
 	 */
-	public void setTitle(String title) {
+	public void setTitle(BaseComponent title) {
 		this.title = title;
 	}
 
-	/**
-	 * Sets title of GUI for GUIs that
-	 * will be open later.
-	 *
-	 * @param title
-	 */
-	public void setTitle(BaseComponent title) {
-		this.title = ComponentSerializer.toString(title);
-	}
-
-
-	/**
-	 * Automatically updates GUI title and reopens inventory
-	 *
-	 * @param titleUpdate
-	 */
-	public void sendTitleUpdate(String titleUpdate) {
-		this.title = titleUpdate;
-		open();
-	}
 
 	/**
 	 * Automatically updates GUI title and reopens inventory
@@ -270,7 +251,7 @@ public abstract class Gui implements InventoryHolder {
 	 * @param titleUpdate
 	 */
 	public void sendTitleUpdate(BaseComponent titleUpdate) {
-		this.title = ComponentSerializer.toString(titleUpdate);
+		this.title = titleUpdate;
 		open();
 	}
 

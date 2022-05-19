@@ -47,7 +47,7 @@ public class Icon {
 	}
 
 	public Icon setName(final BaseComponent name) {
-		return setName(ComponentSerializer.toString(name));
+		return setName(name.toLegacyText());
 	}
 
 	public Icon setName(final String name) {
@@ -55,30 +55,54 @@ public class Icon {
 		return this;
 	}
 
+	public Icon setLore(final BaseComponent lore) {
+		String string_lore = lore.toLegacyText();
+		this.item = Nbt.setNbt_String(this.getItem(), "display.Lore", string_lore);
+		return this;
+	}
+
 	public Icon setLore(final BaseComponent[] lores) {
 		String[] texts = new String[lores.length];
 		for(int i = 0; i < lores.length; i++)
-			texts[i] = ComponentSerializer.toString(lores[i]);
+			texts[i] = lores[i].toLegacyText();
 
 		this.item = Nbt.setNbt_StringArray(this.getItem(), "display.Lore", texts);
 
 		return this;
 	}
 
+	public Icon appendLore(final BaseComponent text) {
+		final ItemMeta meta = item.getItemMeta();
+		if (meta == null) return this;
+		List<String> lore = meta.getLore();
+		if (lore != null) lore.add(text.toLegacyText());
+		else return setLore(text);
+		return setLore((BaseComponent) lore);
+	}
+
 	public Icon appendLore(final BaseComponent[] text) {
 		final ItemMeta meta = item.getItemMeta();
 		if (meta == null) return this;
 		List<String> lore = meta.getLore();
-		if (lore != null) lore.add(ComponentSerializer.toString(text));
+		if (lore != null) lore.add(Arrays.toString(text));
 		else return setLore(text);
 		return setLore(new BaseComponent[]{(BaseComponent) lore});
+	}
+
+	public Icon insertLore(final int index, final BaseComponent text) {
+		final ItemMeta meta = item.getItemMeta();
+		if (meta == null) return this;
+		List<String> lore = meta.getLore();
+		if (lore != null) lore.add(index, text.toLegacyText());
+		else return setLore(text);
+		return setLore((BaseComponent) lore);
 	}
 
 	public Icon insertLore(final int index, final BaseComponent[] text) {
 		final ItemMeta meta = item.getItemMeta();
 		if (meta == null) return this;
 		List<String> lore = meta.getLore();
-		if (lore != null) lore.add(index, ComponentSerializer.toString(text));
+		if (lore != null) lore.add(index, Arrays.toString(text));
 		else return setLore(text);
 		return setLore(new BaseComponent[]{(BaseComponent) lore});
 	}
