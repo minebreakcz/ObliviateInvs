@@ -16,7 +16,7 @@ import java.util.*;
 
 public class Icon {
 
-	private final ItemStack item;
+	private ItemStack item;
 	private ClickAction clickAction;
 	private DragAction dragAction;
 
@@ -47,49 +47,40 @@ public class Icon {
 	}
 
 	public Icon setName(final BaseComponent name) {
-		final ItemMeta meta = item.getItemMeta();
-		if (meta == null) return this;
-		meta.setDisplayName(ComponentSerializer.toString(name));
-		item.setItemMeta(meta);
-		return this;
+		return setName(ComponentSerializer.toString(name));
 	}
 
 	public Icon setName(final String name) {
-		final ItemMeta meta = item.getItemMeta();
-		if (meta == null) return this;
-		meta.setDisplayName(name);
-		item.setItemMeta(meta);
+		Nbt.setNbt_String(this.getItem(), "display.Name", name);
 		return this;
 	}
 
-	public Icon setLore(final List<BaseComponent> lore) {
-		final ItemMeta meta = item.getItemMeta();
-		if (meta == null) return this;
-		meta.setLore(Collections.singletonList(ComponentSerializer.toString(lore)));
-		item.setItemMeta(meta);
+	public Icon setLore(final BaseComponent[] lores) {
+		String[] texts = new String[lores.length];
+		for(int i = 0; i < lores.length; i++)
+			texts[i] = ComponentSerializer.toString(lores[i]);
+
+		this.item = Nbt.setNbt_StringArray(this.getItem(), "display.Lore", texts);
+
 		return this;
 	}
 
-	public Icon setLore(final BaseComponent... lore) {
-		return setLore(new ArrayList<>(Arrays.asList(lore)));
-	}
-
-	public Icon appendLore(final BaseComponent text) {
+	public Icon appendLore(final BaseComponent[] text) {
 		final ItemMeta meta = item.getItemMeta();
 		if (meta == null) return this;
 		List<String> lore = meta.getLore();
 		if (lore != null) lore.add(ComponentSerializer.toString(text));
 		else return setLore(text);
-		return setLore((BaseComponent) lore);
+		return setLore(new BaseComponent[]{(BaseComponent) lore});
 	}
 
-	public Icon insertLore(final int index, final BaseComponent text) {
+	public Icon insertLore(final int index, final BaseComponent[] text) {
 		final ItemMeta meta = item.getItemMeta();
 		if (meta == null) return this;
 		List<String> lore = meta.getLore();
 		if (lore != null) lore.add(index, ComponentSerializer.toString(text));
-		else setLore(text);
-		return setLore((BaseComponent) lore);
+		else return setLore(text);
+		return setLore(new BaseComponent[]{(BaseComponent) lore});
 	}
 
 	public Icon setAmount(final int amount) {
